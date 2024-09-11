@@ -6,7 +6,7 @@ import (
 	"log/slog"
 
 	"avito_task/internal/config"
-	"avito_task/pkg/database/postgres"
+	"avito_task/internal/configure/database/postgres"
 	"avito_task/pkg/logger"
 )
 
@@ -19,6 +19,10 @@ func Run() {
 	defer cancel()
 
 	db := setupDatabase(ctx, log, &cfg)
+
+
+	// ------- repo
+	repoTender :=
 }
 
 func setupDatabase(ctx context.Context, log *slog.Logger, cfg *config.Config) *postgres.PgDB {
