@@ -79,3 +79,29 @@ func (br *BidRepo) FetchBidsByTenderId(ctx context.Context, tenderId uuid.UUID) 
 
 	return toModels(res), nil
 }
+
+func (br *BidRepo) EditBid(ctx context.Context, req requests.EditBidReq) (model.Bid, error) {
+	const op = "repository.bid.EditBid"
+	query := `UPDATE bid SET name = $1, description = $2, updated_at = current_timestamp WHERE id = $3 RETURNING *`
+
+	row := br.db.QueryRow(ctx, query, req.Name, req.Description, req.BidId)
+
+	var res bidRow
+
+	if err := row.Scan(&res.ID, &res.Name, &res.Description, &res.Status, &res.TenderId, &res.OrganizationId, &res.UserId, &res.CreatedAt, &res.UpdatedAt); err != nil {
+		return model.Bid{}, fmt.Errorf("%s: scan result: %w", op, err)
+	}
+	return toModel(res), nil
+}
+
+func (br *BidRepo) ChangeStatusBid(ctx context.Context, req requests.ChangeStatusBidReq) error {
+	const op = "repository.bid.ChangeStatusBid"
+	fmt.Println(req)
+	query := `UPDATE bid SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2`
+
+	_, err := br.db.Exec(ctx, query, req.Status, req.BidId)
+	if err != nil {
+		return fmt.Errorf("%s: execute statement: %w", op, err)
+	}
+	return nil
+}

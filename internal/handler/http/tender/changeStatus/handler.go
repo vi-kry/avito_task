@@ -40,7 +40,6 @@ func (h *Handler) Handle(w http.ResponseWriter, r *http.Request) {
 
 	req := request.toDTO()
 
-	// change names
 	err = h.tenderStatusChanger.ChangeStatusTender(r.Context(), &req)
 	if err != nil {
 		h.log.Error("failed to change status:", err)

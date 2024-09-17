@@ -1,12 +1,14 @@
 package app
 
 import (
+	changeStatusBid "avito_task/internal/handler/http/bid/changeStatus"
 	createBid "avito_task/internal/handler/http/bid/create"
+	editBid "avito_task/internal/handler/http/bid/edit"
 	getBids "avito_task/internal/handler/http/bid/get"
 	getBidsByTenderId "avito_task/internal/handler/http/bid/getByTenderId"
-	"avito_task/internal/handler/http/tender/changeStatus"
+	changeStatusTender "avito_task/internal/handler/http/tender/changeStatus"
 	"avito_task/internal/handler/http/tender/create"
-	"avito_task/internal/handler/http/tender/edit"
+	editTender "avito_task/internal/handler/http/tender/edit"
 	"avito_task/internal/handler/http/tender/getAll"
 	"avito_task/internal/handler/http/tender/getAllByUserId"
 	"context"
@@ -52,13 +54,15 @@ func Run() {
 	// handler
 	createTenderHandler := create.NewHandler(createTenderUseCase, log)
 	getAllTendersHandler := getAll.NewHandler(repoTender, log)
-	changeStatusTenderHandler := changeStatus.NewHandler(repoTender, log)
+	changeStatusTenderHandler := changeStatusTender.NewHandler(repoTender, log)
 	getTendersByUserIdHandler := getAllByUserId.NewHandler(getTendersByUserIdUseCase, log)
-	editTenderHandler := edit.NewHandler(repoTender, log)
+	editTenderHandler := editTender.NewHandler(repoTender, log)
 
 	createBidHandler := createBid.NewHandler(createBidUseCase, log)
 	getBidsByUsernameHandler := getBids.NewHandler(getBidsByUsername, log)
 	getBidsByTenderIdHandler := getBidsByTenderId.NewHandler(repoBid, log)
+	editBidHandler := editBid.NewHandler(repoBid, log)
+	changeStatusBidHandler := changeStatusBid.NewHandler(repoBid, log)
 
 	// router
 	r := chi.NewRouter()
@@ -79,8 +83,11 @@ func Run() {
 
 			r.Route("/bids", func(r chi.Router) {
 				r.Post("/new", createBidHandler.Handle)
+				r.Post("/status", changeStatusBidHandler.Handle)
 				r.Get("/my", getBidsByUsernameHandler.Handle)
 				r.Get("/{tenderId}/list", getBidsByTenderIdHandler.Handle)
+
+				r.Patch("/{bidId}/edit", editBidHandler.Handle)
 			})
 		})
 	})

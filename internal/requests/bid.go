@@ -11,3 +11,14 @@ type CreateBidReq struct {
 	UserId          uuid.UUID
 	CreatorUsername string
 }
+
+type EditBidReq struct {
+	Name        string
+	Description string
+	BidId       uuid.UUID
+}
+
+type ChangeStatusBidReq struct {
+	Status string
+	BidId  uuid.UUID
+}
