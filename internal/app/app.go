@@ -6,6 +6,7 @@ import (
 	editBid "avito_task/internal/handler/http/bid/edit"
 	getBids "avito_task/internal/handler/http/bid/get"
 	getBidsByTenderId "avito_task/internal/handler/http/bid/getByTenderId"
+	submitBid "avito_task/internal/handler/http/bid/submit"
 	changeStatusTender "avito_task/internal/handler/http/tender/changeStatus"
 	"avito_task/internal/handler/http/tender/create"
 	editTender "avito_task/internal/handler/http/tender/edit"
@@ -24,6 +25,7 @@ import (
 	repositoryTender "avito_task/internal/repository/tender"
 	usecaseCreateBid "avito_task/internal/usecase/bid/create"
 	usecaseFetchBids "avito_task/internal/usecase/bid/fetch"
+	usecaseSubmitBids "avito_task/internal/usecase/bid/submit"
 	usecaseTender "avito_task/internal/usecase/tender"
 	"avito_task/pkg/logger"
 )
@@ -50,6 +52,7 @@ func Run() {
 
 	createBidUseCase := usecaseCreateBid.NewBidUseCase(repoBid, repoEmployee)
 	getBidsByUsername := usecaseFetchBids.NewBidUseCase(repoBid, repoEmployee)
+	submitBidUseCase := usecaseSubmitBids.NewSubmitUseCase(repoBid, repoTender)
 
 	// handler
 	createTenderHandler := create.NewHandler(createTenderUseCase, log)
@@ -63,6 +66,7 @@ func Run() {
 	getBidsByTenderIdHandler := getBidsByTenderId.NewHandler(repoBid, log)
 	editBidHandler := editBid.NewHandler(repoBid, log)
 	changeStatusBidHandler := changeStatusBid.NewHandler(repoBid, log)
+	submitBidHandler := submitBid.NewHandler(submitBidUseCase, log)
 
 	// router
 	r := chi.NewRouter()
@@ -86,6 +90,8 @@ func Run() {
 				r.Post("/status", changeStatusBidHandler.Handle)
 				r.Get("/my", getBidsByUsernameHandler.Handle)
 				r.Get("/{tenderId}/list", getBidsByTenderIdHandler.Handle)
+
+				r.Post("/submit_decision", submitBidHandler.Handle)
 
 				r.Patch("/{bidId}/edit", editBidHandler.Handle)
 			})

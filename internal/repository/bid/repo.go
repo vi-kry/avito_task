@@ -105,3 +105,21 @@ func (br *BidRepo) ChangeStatusBid(ctx context.Context, req requests.ChangeStatu
 	}
 	return nil
 }
+
+func (br *BidRepo) FetchBidByBidId(ctx context.Context, bidId uuid.UUID) (model.Bid, error) {
+	const op = "repository.bid.FetchBidByBidId"
+
+	fmt.Println(bidId)
+	query := `SELECT * FROM bid WHERE id = $1`
+
+	row := br.db.QueryRow(ctx, query, bidId)
+
+	var res bidRow
+
+	if err := row.Scan(&res.ID, &res.Name, &res.Description, &res.Status, &res.TenderId, &res.OrganizationId, &res.UserId, &res.CreatedAt, &res.UpdatedAt); err != nil {
+		return model.Bid{}, fmt.Errorf("%s: scan result: %w", op, err)
+	}
+	fmt.Println(res)
+
+	return toModel(res), nil
+}
