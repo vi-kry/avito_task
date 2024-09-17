@@ -3,26 +3,67 @@ package tender
 import (
 	"avito_task/internal/model"
 	"context"
-	"log/slog"
+	"fmt"
 )
 
-type Repository interface {
-	Create(context.Context, model.Tender) (model.Tender, error)
+type repoTender interface {
+	CreateTender(context.Context, *model.CreateTenderReq) (model.Tender, error)
 }
 
-type TenderUseCase struct {
-	repo Repository
-	log  *slog.Logger
+type repoEmployee interface {
+	FetchEmployeeByUsername(ctx context.Context, username string) (model.Employee, error)
 }
 
-func NewTenderUseCase(repo Repository, log *slog.Logger) *TenderUseCase {
-	return &TenderUseCase{
-		repo: repo,
-		log:  log,
+type UseCase struct {
+	tender   repoTender
+	employee repoEmployee
+}
+
+func NewTenderUseCase(tender repoTender, employee repoEmployee) *UseCase {
+	return &UseCase{
+		tender:   tender,
+		employee: employee,
 	}
 }
 
-func (t *TenderUseCase) CreateTender(ctx context.Context, tender *model.Tender) (model.Tender, error) {
-	const op = "usecase.tender.Create"
-	//
+func (u *UseCase) CreateTenderUseCase(ctx context.Context, req *model.CreateTenderReq) (model.CreateTenderResp, error) {
+	const op = "useCase.tender.CreateTenderUseCase"
+	employee, err := u.FetchEmployeeByUsernameUseCase(ctx, req.CreatorUsername)
+	if err != nil {
+		return model.CreateTenderResp{}, fmt.Errorf("%s: %w", op, err)
+	}
+
+	req.UserId = employee.ID
+	req.Status = model.StatusTenderCreated
+
+	tender, err := u.tender.CreateTender(ctx, req)
+	if err != nil {
+		return model.CreateTenderResp{}, fmt.Errorf("%s: %w", op, err)
+	}
+
+	return model.CreateTenderResp{
+		ID:              tender.ID,
+		Name:            tender.Name,
+		Description:     tender.Description,
+		ServiceType:     tender.ServiceType,
+		Status:          tender.Status,
+		OrganizationId:  tender.OrganizationId,
+		CreatorUsername: employee.Username,
+	}, nil
+}
+
+func (u *UseCase) FetchEmployeeByUsernameUseCase(ctx context.Context, username string) (model.FetchEmployeeByUsernameResp, error) {
+	const op = "useCase.tender.FetchEmployeeByUsernameUseCase"
+	emp, err := u.employee.FetchEmployeeByUsername(ctx, username)
+	if err != nil {
+		return model.FetchEmployeeByUsernameResp{}, fmt.Errorf("%s: %w", op, err)
+	}
+	return model.FetchEmployeeByUsernameResp{
+		ID:        emp.ID,
+		Username:  emp.Username,
+		FirstName: emp.FirstName,
+		LastName:  emp.LastName,
+		CreatedAt: emp.CreatedAt,
+		UpdatedAt: emp.UpdatedAt,
+	}, nil
 }

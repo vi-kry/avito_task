@@ -11,16 +11,16 @@ type Config struct {
 }
 
 type HTTPConfig struct {
-	Address string `env:"SERVER_ADDRESS"`
+	Address string `env:"SERVER_ADDRESS" env-default:":8080"`
 }
 
 type PostgresConfig struct {
 	Host     string `env:"POSTGRES_HOST" env-default:"localhost"`
 	Port     string `env:"POSTGRES_PORT" env-default:"5432"`
-	Username string `env:"POSTGRES_USERNAME" env-default:"user"`
+	Username string `env:"POSTGRES_USERNAME" env-default:"postgres"`
 	DbName   string `env:"POSTGRES_DATABASE" env-default:"postgres"`
 	SslMode  string `env:"SSL_MODE" env-default:"disable"`
-	Password string `env:"PASSWORD"`
+	Password string `env:"PASSWORD" env-default:"postgres"`
 }
 
 func InitConfig() Config {
