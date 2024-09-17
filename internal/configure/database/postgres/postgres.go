@@ -17,14 +17,10 @@ type PgDB struct {
 func NewPostgresDB(ctx context.Context, log *slog.Logger, dsn string) (*PgDB, error) {
 	const op = "postgres.NewPostgresDB"
 
-	//db, err := sqlx.Open("postgres", dsn)
 	config, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
-
-	// ----- nado ili net? -----
-	// config.MaxConnIdleTime = 1 * time.Second
 
 	db, err := pgxpool.NewWithConfig(ctx, config)
 	if err != nil {

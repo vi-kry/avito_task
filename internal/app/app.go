@@ -12,11 +12,15 @@ import (
 	editTender "avito_task/internal/handler/http/tender/edit"
 	"avito_task/internal/handler/http/tender/getAll"
 	"avito_task/internal/handler/http/tender/getAllByUserId"
+	"avito_task/internal/server"
 	"context"
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	"log/slog"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"avito_task/internal/config"
 	"avito_task/internal/configure/database/postgres"
@@ -99,7 +103,30 @@ func Run() {
 	})
 
 	// gc
-	http.ListenAndServe(":8080", r)
+	srv := new(server.Server)
+	go func() {
+		log.Info("start http server")
+		err := srv.Run(cfg.HTTP.Address, r)
+		if err != http.ErrServerClosed {
+			log.Error("error occurred while running http server: %s", err.Error())
+			os.Exit(1)
+		}
+	}()
+
+	signalListner := make(chan os.Signal, 1)
+	signal.Notify(signalListner,
+		syscall.SIGHUP,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+		syscall.SIGQUIT,
+	)
+	stop := <-signalListner
+	fmt.Println(cfg)
+	log.Info("Shutting Down app: %s", stop)
+
+	if err := srv.Shutdown(context.Background()); err != nil {
+		log.Error("error occurred on server shutting down: %s", err.Error())
+	}
 }
 
 func setupDatabase(ctx context.Context, log *slog.Logger, cfg *config.Config) *postgres.PgDB {
