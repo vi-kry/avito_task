@@ -1,9 +1,10 @@
 package employee
 
 import (
-	"avito_task/internal/model"
 	"context"
 	"fmt"
+
+	"avito_task/internal/model"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 )

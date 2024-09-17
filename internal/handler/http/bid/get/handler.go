@@ -1,10 +1,11 @@
 package get
 
 import (
-	"avito_task/internal/model"
 	"context"
 	"encoding/json"
 	"net/http"
+
+	"avito_task/internal/model"
 )
 
 type bidGetter interface {

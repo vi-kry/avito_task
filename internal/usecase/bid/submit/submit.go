@@ -1,9 +1,10 @@
 package submit
 
 import (
-	"avito_task/internal/model"
 	"context"
 	"fmt"
+
+	"avito_task/internal/model"
 	"github.com/google/uuid"
 )
 

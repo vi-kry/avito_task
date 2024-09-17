@@ -1,11 +1,12 @@
 package getAllByUserId
 
 import (
-	"avito_task/internal/model"
 	"context"
 	"encoding/json"
 	"log/slog"
 	"net/http"
+
+	"avito_task/internal/model"
 )
 
 type tendersByUserIdGetter interface {

@@ -1,9 +1,10 @@
 package tender
 
 import (
-	"avito_task/internal/model"
 	"context"
 	"fmt"
+
+	"avito_task/internal/model"
 )
 
 type repoTender interface {

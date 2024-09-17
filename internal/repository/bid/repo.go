@@ -1,10 +1,11 @@
 package bid
 
 import (
-	"avito_task/internal/model"
-	"avito_task/internal/requests"
 	"context"
 	"fmt"
+
+	"avito_task/internal/model"
+	"avito_task/internal/requests"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 )

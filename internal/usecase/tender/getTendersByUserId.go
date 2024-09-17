@@ -1,9 +1,10 @@
 package tender
 
 import (
-	"avito_task/internal/model"
 	"context"
 	"fmt"
+
+	"avito_task/internal/model"
 	"github.com/google/uuid"
 )
 
@@ -44,7 +45,6 @@ func (g *GetTendersByUserIdUseCase) GetTendersByUserId(ctx context.Context, req 
 	return tenders, nil
 }
 
-// POVTOR
 func (g *GetTendersByUserIdUseCase) GetEmployeeByUsername(ctx context.Context, username string) (model.FetchEmployeeByUsernameResp, error) {
 	const op = "useCase.tender.FetchEmployeeByUsername"
 	emp, err := g.employee.FetchEmployeeByUsername(ctx, username)

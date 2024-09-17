@@ -1,10 +1,11 @@
 package changeStatus
 
 import (
-	"avito_task/internal/model"
 	"context"
 	"encoding/json"
 	"net/http"
+
+	"avito_task/internal/model"
 )
 
 type tenderStatusChanger interface {

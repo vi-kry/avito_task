@@ -1,11 +1,12 @@
 package getAll
 
 import (
-	"avito_task/internal/model"
 	"context"
 	"encoding/json"
 	"log/slog"
 	"net/http"
+
+	"avito_task/internal/model"
 )
 
 type tendersGetter interface {

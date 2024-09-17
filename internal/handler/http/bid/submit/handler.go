@@ -3,8 +3,9 @@ package submit
 import (
 	"context"
 	"encoding/json"
-	"github.com/google/uuid"
 	"net/http"
+
+	"github.com/google/uuid"
 )
 
 type bidSubmitter interface {

@@ -1,9 +1,10 @@
 package fetch
 
 import (
-	"avito_task/internal/model"
 	"context"
 	"fmt"
+
+	"avito_task/internal/model"
 	"github.com/google/uuid"
 )
 
@@ -39,6 +40,7 @@ func (u *UseCase) FetchBids(ctx context.Context, username string) ([]model.Bid, 
 		return []model.Bid{}, fmt.Errorf("%s: %w", op, err)
 	}
 	for i := range bids {
+
 		bids[i].CreatorUsername = username
 	}
 	return bids, nil

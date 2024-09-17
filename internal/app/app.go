@@ -1,6 +1,15 @@
 package app
 
 import (
+	"context"
+	"fmt"
+	"github.com/go-chi/chi/v5"
+	"log/slog"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+
 	changeStatusBid "avito_task/internal/handler/http/bid/changeStatus"
 	createBid "avito_task/internal/handler/http/bid/create"
 	editBid "avito_task/internal/handler/http/bid/edit"
@@ -13,14 +22,6 @@ import (
 	"avito_task/internal/handler/http/tender/getAll"
 	"avito_task/internal/handler/http/tender/getAllByUserId"
 	"avito_task/internal/server"
-	"context"
-	"fmt"
-	"github.com/go-chi/chi/v5"
-	"log/slog"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"avito_task/internal/config"
 	"avito_task/internal/configure/database/postgres"

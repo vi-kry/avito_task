@@ -1,13 +1,14 @@
 package edit
 
 import (
-	"avito_task/internal/model"
 	"context"
 	"encoding/json"
-	"github.com/go-chi/chi/v5"
-	"github.com/google/uuid"
 	"log/slog"
 	"net/http"
+
+	"avito_task/internal/model"
+	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
 )
 
 type tenderEditor interface {

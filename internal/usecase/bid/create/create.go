@@ -1,10 +1,11 @@
 package create
 
 import (
-	"avito_task/internal/model"
-	"avito_task/internal/requests"
 	"context"
 	"fmt"
+
+	"avito_task/internal/model"
+	"avito_task/internal/requests"
 )
 
 type repoBid interface {

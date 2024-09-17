@@ -1,15 +1,16 @@
 package create
 
 import (
-	"avito_task/internal/model"
 	"context"
 	"encoding/json"
 	"log/slog"
 	"net/http"
+
+	"avito_task/internal/model"
 )
 
 type tenderCreator interface {
-	CreateTenderUseCase(context.Context, *model.CreateTenderReq) (model.CreateTenderResp, error)
+	CreateTenderUseCase(ctx context.Context, req *model.CreateTenderReq) (model.CreateTenderResp, error)
 	FetchEmployeeByUsernameUseCase(ctx context.Context, username string) (model.FetchEmployeeByUsernameResp, error)
 }
 
@@ -34,6 +35,7 @@ func (h *Handler) Handle(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	defer r.Body.Close()
 
 	// todo: добавить err = request.validate()
 

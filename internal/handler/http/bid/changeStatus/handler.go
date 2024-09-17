@@ -1,10 +1,11 @@
 package changeStatus
 
 import (
-	"avito_task/internal/requests"
 	"context"
 	"encoding/json"
 	"net/http"
+
+	"avito_task/internal/requests"
 )
 
 type bidStatusChanger interface {
